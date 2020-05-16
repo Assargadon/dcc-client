@@ -1,0 +1,115 @@
+
+================================== Метаинформация:
+1) идентификатор пользователя
+2) идентификатор телефона (если найдётся)
+3) модель телефона
+4) таймстемпы начала и конца записи (плюс, вероятно, часовой пояс)
+5) разрешениЯ видео (передней и задней камер)
+6) возраст
+7) пол
+
+
+================================== Is there a unique Android device ID?
+
+import android.provider.Settings.Secure;
+
+private String android_id = Secure.getString(getContext().getContentResolver(), Secure.ANDROID_ID); 
+
+
+================================== Get Android Phone Model programmatically
+
+
+/** Returns the consumer friendly device name */
+public static String getDeviceName() {
+  String manufacturer = Build.MANUFACTURER;
+  String model = Build.MODEL;
+  if (model.startsWith(manufacturer)) {
+    return capitalize(model);
+  }
+  return capitalize(manufacturer) + " " + model;
+}
+
+private static String capitalize(String str) {
+  if (TextUtils.isEmpty(str)) {
+    return str;
+  }
+  char[] arr = str.toCharArray();
+  boolean capitalizeNext = true;
+
+  StringBuilder phrase = new StringBuilder();
+  for (char c : arr) {
+    if (capitalizeNext && Character.isLetter(c)) {
+      phrase.append(Character.toUpperCase(c));
+      capitalizeNext = false;
+      continue;
+    } else if (Character.isWhitespace(c)) {
+      capitalizeNext = true;
+    }
+    phrase.append(c);
+  }
+
+  return phrase.toString();
+}
+
+
+Example from my Verizon HTC One M8:
+
+// using method from above
+System.out.println(getDeviceName());
+
+HTC6525LVW
+
+
+// Using https://github.com/jaredrummler/AndroidDeviceNames
+Download the latest AAR or grab via Gradle:
+compile 'com.jaredrummler:android-device-names:2.0.0'
+
+System.out.println(DeviceName.getDeviceName());
+
+HTC One (M8)
+
+================================== (variant 2)
+
+public String getDeviceName() {
+    String manufacturer = Build.MANUFACTURER;
+    String model = Build.MODEL;
+    if (model.toLowerCase().startsWith(manufacturer.toLowerCase())) {
+        return capitalize(model);
+    } else {
+        return capitalize(manufacturer) + " " + model;
+    }
+}
+
+
+private String capitalize(String s) {
+    if (s == null || s.length() == 0) {
+        return "";
+    }
+    char first = s.charAt(0);
+    if (Character.isUpperCase(first)) {
+        return s;
+    } else {
+        return Character.toUpperCase(first) + s.substring(1);
+    }
+} 
+
+Samsung GT-S5830L
+Motorola MB860
+Sony Ericsson LT18i
+LGE LG-P500
+HTC Desire V
+HTC Wildfire S A510e
+
+================================== variant 3
+
+String deviceName = android.os.Build.MODEL; // returns model name 
+String deviceManufacturer = android.os.Build.MANUFACTURER; // returns manufacturer
+String name = Build.MANUFACTURER + " - " + Build.MODEL
+String manufacturer = Build.MANUFACTURER;
+String brand        = Build.BRAND;
+String product      = Build.PRODUCT;
+String model        = Build.MODEL;
+
+==================================
+
+==================================
