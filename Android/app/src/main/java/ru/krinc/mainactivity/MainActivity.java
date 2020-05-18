@@ -26,13 +26,21 @@ import android.view.TextureView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Set;
 
 public class MainActivity extends Activity {
-    private static final String TAG = "AndroidCameraApi";
+    private static final String TAG = "MainActivity";
 
     private final boolean enableCam2 = true;
 
@@ -44,8 +52,9 @@ public class MainActivity extends Activity {
         ORIENTATIONS.append(Surface.ROTATION_270, 180);
     }
 
-    private Button takePictureButton;
+    public Bundle mMetadata = new Bundle();
 
+    private Button startStopButton;
     private TextureView[] mTextureViews = new TextureView[2];
     private String[] mCameraIds = new String[2];
     private CameraDevice[] mCameraDevices = new CameraDevice[2];
@@ -53,6 +62,7 @@ public class MainActivity extends Activity {
     private MediaRecorder[] mMediaRecorders = new MediaRecorder[2];
     private CaptureRequest.Builder[] mCaptureRequestBuilders = new CaptureRequest.Builder[2];
     private String[] mNextVideoAbsolutePaths = new String[2];
+    private String mNextMetadataAbsolutePath;
     private ArrayList<Surface>[] mSurfaces = new ArrayList[2];
 
     private Size[] mPreviewSizes = new Size[2];
@@ -81,12 +91,12 @@ public class MainActivity extends Activity {
         textureView2 = (TextureView) findViewById(R.id.texture2);
         assert textureView2 != null;
 
-        takePictureButton = (Button) findViewById(R.id.btn_takepicture);
-        assert takePictureButton != null;
-        takePictureButton.setOnClickListener(new View.OnClickListener() {
+        startStopButton = (Button) findViewById(R.id.btn_takepicture);
+        assert startStopButton != null;
+        startStopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                takePicture();
+                startStopHandler();
             }
         });
 
@@ -206,16 +216,19 @@ public class MainActivity extends Activity {
         }
     }
 
-    protected void takePicture() {
+    protected void startStopHandler() {
         if (isRecording) {
+            mMetadata.putLong("stop_timestamp", System.currentTimeMillis() / 1000);
             stopRecording(0);
             if (enableCam2) stopRecording(1);
-            takePictureButton.setText(R.string.record_video);
+            startStopButton.setText(R.string.record_video);
+            saveMetadata();
         } else {
-            getNextVideoFilePath();
+            mMetadata.putLong("start_timestamp", System.currentTimeMillis() / 1000);
+            getNextFileGroupPaths();
             startRecording(0);
             if (enableCam2) startRecording(1);
-            takePictureButton.setText(R.string.stop_recording);
+            startStopButton.setText(R.string.stop_recording);
         }
         isRecording = !isRecording;
         /*
@@ -309,6 +322,9 @@ public class MainActivity extends Activity {
     }
 
     protected void startPreview(final int index) {
+        if (null == mCameraDevices[index] || !mTextureViews[index].isAvailable()) {
+            return;
+        }
         try {
             SurfaceTexture texture = mTextureViews[index].getSurfaceTexture();
             assert texture != null;
@@ -370,7 +386,7 @@ public class MainActivity extends Activity {
             mSurfaces[index].add(recorderSurface);
             boolean b = recorderSurface.isValid();
 
-            if (index == 0) mCaptureRequestBuilders[index].set(CaptureRequest.FLASH_MODE, CameraMetadata.FLASH_MODE_TORCH);
+                if (index == 0) mCaptureRequestBuilders[index].set(CaptureRequest.FLASH_MODE, CameraMetadata.FLASH_MODE_TORCH);
 
             //new Handler().postDelayed(new Runnable() {
             //    @Override
@@ -417,12 +433,37 @@ public class MainActivity extends Activity {
 
     private void stopRecording(int index) {
         // Stop recording
-        mMediaRecorders[index].stop();
-        mMediaRecorders[index].reset();
-
-        Toast.makeText(this, "Video saved: " + mNextVideoAbsolutePaths[index], Toast.LENGTH_SHORT).show();
+        try {
+            mMediaRecorders[index].stop();
+            mMediaRecorders[index].reset();
+            Toast.makeText(this, "Video saved: " + mNextVideoAbsolutePaths[index], Toast.LENGTH_SHORT).show();
+        } catch (IllegalStateException e) {
+            e.printStackTrace();
+        }
 
         startPreview(index);
+    }
+
+    private void saveMetadata() {
+        JSONObject json = new JSONObject();
+        Set<String> keys = mMetadata.keySet();
+        for (String key : keys) {
+            try {
+                json.put(key, JSONObject.wrap(mMetadata.get(key)));
+            } catch(JSONException e) {
+                e.printStackTrace();
+            }
+        }
+
+        try {
+            Writer output = null;
+            File file = new File(mNextMetadataAbsolutePath);
+            output = new BufferedWriter(new FileWriter(file));
+            output.write(json.toString());
+            output.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void openCamera(int index) {
@@ -434,8 +475,14 @@ public class MainActivity extends Activity {
             CameraCharacteristics characteristics = manager.getCameraCharacteristics(mCameraIds[index]);
             StreamConfigurationMap map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP);
             assert map != null;
-            mPreviewSizes[index] = map.getOutputSizes(SurfaceTexture.class)[0];
-            mVideoSizes[index] = map.getOutputSizes(MediaRecorder.class)[10];
+            Size[] previewSizes = map.getOutputSizes(SurfaceTexture.class);
+            mPreviewSizes[index] = previewSizes[0];
+            Size[] videoSizes = map.getOutputSizes(MediaRecorder.class);
+            if (index == 0) {
+                mVideoSizes[index] = videoSizes[5];
+            } else {
+                mVideoSizes[index] = videoSizes[videoSizes.length - 1];
+            }
             // Add permission for camera and let user grant the permission
             if (
                     checkSelfPermission(Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED
@@ -460,12 +507,14 @@ public class MainActivity extends Activity {
         //Log.e(TAG, "openCamera X");
     }
 
-    private void getNextVideoFilePath() {
-        final File dir = this.getExternalFilesDir(null);
+    private void getNextFileGroupPaths() {
+        //final File dir = this.getExternalFilesDir(null);
+        final File dir = android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOWNLOADS);
         long t = System.currentTimeMillis();
         String d = (dir == null ? "" : (dir.getAbsolutePath() + "/"));
-        mNextVideoAbsolutePaths[0] = d + "PPG_BACK_" + t + ".mp4";
-        mNextVideoAbsolutePaths[1] = d + "PPG_FRONT_" + t + ".mp4";
+        mNextVideoAbsolutePaths[0] = d + "PPG_" + t + "_BACK.mp4";
+        mNextVideoAbsolutePaths[1] = d + "PPG_" + t + "_FRONT.mp4";
+        mNextMetadataAbsolutePath =  d + "PPG_" + t + "_METADATA.json";
     }
 
     private void setUpMediaRecorder(int index) throws IOException {

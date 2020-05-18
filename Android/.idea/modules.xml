@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/Android.iml" filepath="$PROJECT_DIR$/Android.iml" group="Android" />
       <module fileurl="file://$PROJECT_DIR$/Android-Camera2-API-Example.iml" filepath="$PROJECT_DIR$/Android-Camera2-API-Example.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/Android-Camera2-API-Example-app.iml" filepath="$PROJECT_DIR$/app/Android-Camera2-API-Example-app.iml" group="Android-Camera2-API-Example/app" />
+      <module fileurl="file://$PROJECT_DIR$/app/Android-app.iml" filepath="$PROJECT_DIR$/app/Android-app.iml" group="Android/app" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/rPPGData-Android-Camera2-API-Example.iml" filepath="$PROJECT_DIR$/rPPGData-Android-Camera2-API-Example.iml" group="Android-Camera2-API-Example" />
     </modules>
   </component>
 </project>

@@ -3,4 +3,6 @@
     <string name="choose_user">Choose a user</string>
     <string name="record_video">Record video</string>
     <string name="stop_recording">Stop recording</string>
+
+    <string name="tv_userid">User ID:</string>
 </resources>
