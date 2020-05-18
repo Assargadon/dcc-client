@@ -231,6 +231,8 @@ public class MainActivity extends Activity {
             mMetadata.putInt("finger_height", mVideoSizes[0].getHeight());
             mMetadata.putInt("face_width", mVideoSizes[1].getWidth());
             mMetadata.putInt("face_height", mVideoSizes[1].getHeight());
+            mMetadata.putString("finger_video", mNextVideoAbsolutePaths[0]);
+            mMetadata.putString("face_video", mNextVideoAbsolutePaths[1]);
             stopRecording(0);
             if (enableCam2) stopRecording(1);
             startStopButton.setText(R.string.btn_record_video);
