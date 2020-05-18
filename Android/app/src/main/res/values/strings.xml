@@ -6,7 +6,7 @@
 
     <string name="tv_userid">User ID:</string>
     <string name="tv_username">User Name:</string>
-    <string name="tv_userage">User Age:</string>
+    <string name="tv_userbirthyear">User Birth Year:</string>
     <string name="tv_usergender">User Gender:</string>
     <string-array name="tv_usergender_items">
         <item>Not set</item>

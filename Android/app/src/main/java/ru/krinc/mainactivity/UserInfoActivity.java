@@ -14,7 +14,7 @@ import android.widget.Toast;
 public class UserInfoActivity extends AppCompatActivity {
 
     private EditText mUserName;
-    private EditText mUserAge;
+    private EditText mUserBirthyear;
     private Spinner mUserGender;
     private Button mGoToVideo;
 
@@ -24,7 +24,7 @@ public class UserInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_userinfo);
 
         mUserName = findViewById(R.id.et_username);
-        mUserAge = findViewById(R.id.et_userage);
+        mUserBirthyear = findViewById(R.id.et_userbirthyear);
 
         mUserGender = findViewById(R.id.sp_usergender);
         ArrayAdapter<CharSequence> staticAdapter = ArrayAdapter.createFromResource(this, R.array.tv_usergender_items, android.R.layout.simple_spinner_item);
@@ -50,14 +50,14 @@ public class UserInfoActivity extends AppCompatActivity {
             Toast.makeText(this, "Please, enter the user name", Toast.LENGTH_SHORT).show();
             return;
         }
-        int userAge = 0;
+        int userBirthYear = 0;
         try {
-            userAge = Integer.parseInt(mUserAge.getText().toString());
+            userBirthYear = Integer.parseInt(mUserBirthyear.getText().toString());
         } catch (Exception unused) {
-            userAge = 0;
+            userBirthYear = 0;
         }
-        if (userAge <= 0) {
-            mUserAge.requestFocus();
+        if (userBirthYear <= 0) {
+            mUserBirthyear.requestFocus();
             Toast.makeText(this, "Please, enter the user age", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -65,7 +65,7 @@ public class UserInfoActivity extends AppCompatActivity {
 
         Bundle bundle = new Bundle();
         bundle.putString("user_name", userName);
-        bundle.putInt("user_age", userAge);
+        bundle.putInt("user_birth_year", userBirthYear);
         bundle.putString("user_gender", userGender);
 
         String manufacturer = Build.MANUFACTURER;
