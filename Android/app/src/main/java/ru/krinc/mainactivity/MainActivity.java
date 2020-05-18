@@ -54,6 +54,7 @@ public class MainActivity extends Activity {
     }
 
     public Bundle mMetadata = new Bundle();
+    public String mUserID = "PPG";
 
     private Button startStopButton;
     private TextureView[] mTextureViews = new TextureView[2];
@@ -81,6 +82,7 @@ public class MainActivity extends Activity {
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mMetadata = extras.getBundle(EXTRA_USERINFO);
+            if (mMetadata != null) mUserID = mMetadata.getString("user_id", mUserID);
         }
 
         textureListeners[0] = this.textureListener1;
@@ -225,10 +227,10 @@ public class MainActivity extends Activity {
     protected void startStopHandler() {
         if (isRecording) {
             mMetadata.putLong("stop_timestamp", System.currentTimeMillis() / 1000);
-            mMetadata.putInt("back_width", mVideoSizes[0].getWidth());
-            mMetadata.putInt("back_height", mVideoSizes[0].getHeight());
-            mMetadata.putInt("front_width", mVideoSizes[1].getWidth());
-            mMetadata.putInt("front_height", mVideoSizes[1].getHeight());
+            mMetadata.putInt("finger_width", mVideoSizes[0].getWidth());
+            mMetadata.putInt("finger_height", mVideoSizes[0].getHeight());
+            mMetadata.putInt("face_width", mVideoSizes[1].getWidth());
+            mMetadata.putInt("face_height", mVideoSizes[1].getHeight());
             stopRecording(0);
             if (enableCam2) stopRecording(1);
             startStopButton.setText(R.string.btn_record_video);
@@ -488,7 +490,7 @@ public class MainActivity extends Activity {
             Size[] previewSizes = map.getOutputSizes(SurfaceTexture.class);
             mPreviewSizes[index] = previewSizes[0];
             Size[] videoSizes = map.getOutputSizes(MediaRecorder.class);
-            if (index == 0) {
+            if (index == 1) {
                 mVideoSizes[index] = videoSizes[5];
             } else {
                 mVideoSizes[index] = videoSizes[videoSizes.length - 1];
@@ -522,9 +524,10 @@ public class MainActivity extends Activity {
         final File dir = android.os.Environment.getExternalStoragePublicDirectory(android.os.Environment.DIRECTORY_DOWNLOADS);
         long t = System.currentTimeMillis();
         String d = (dir == null ? "" : (dir.getAbsolutePath() + "/"));
-        mNextVideoAbsolutePaths[0] = d + "PPG_" + t + "_BACK.mp4";
-        mNextVideoAbsolutePaths[1] = d + "PPG_" + t + "_FRONT.mp4";
-        mNextMetadataAbsolutePath =  d + "PPG_" + t + "_METADATA.json";
+        String userIDEscaped = mUserID.replaceAll("\\W+", "_");
+        mNextVideoAbsolutePaths[0] = d + userIDEscaped + "_" + t + "_FINGER.mp4";
+        mNextVideoAbsolutePaths[1] = d + userIDEscaped + "_" + t + "_FACE.mp4";
+        mNextMetadataAbsolutePath =  d + userIDEscaped + "_" + t + "_METADATA.json";
     }
 
     private void setUpMediaRecorder(int index) throws IOException {

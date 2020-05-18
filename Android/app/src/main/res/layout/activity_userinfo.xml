@@ -16,11 +16,11 @@
             android:paddingStart="5dp"
             android:paddingEnd="5dp"
             android:layout_height="match_parent"
-            android:labelFor="@id/et_username"
-            android:text="@string/tv_username">
+            android:labelFor="@id/et_userid"
+            android:text="@string/tv_userid">
         </TextView>
         <EditText
-            android:id="@+id/et_username"
+            android:id="@+id/et_userid"
             android:layout_width="match_parent"
             android:paddingStart="5dp"
             android:paddingEnd="5dp"

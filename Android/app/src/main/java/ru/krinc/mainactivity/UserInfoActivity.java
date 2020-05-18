@@ -13,7 +13,7 @@ import android.widget.Toast;
 
 public class UserInfoActivity extends AppCompatActivity {
 
-    private EditText mUserName;
+    private EditText mUserID;
     private EditText mUserBirthyear;
     private Spinner mUserGender;
     private Button mGoToVideo;
@@ -23,7 +23,7 @@ public class UserInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_userinfo);
 
-        mUserName = findViewById(R.id.et_username);
+        mUserID = findViewById(R.id.et_userid);
         mUserBirthyear = findViewById(R.id.et_userbirthyear);
 
         mUserGender = findViewById(R.id.sp_usergender);
@@ -40,14 +40,14 @@ public class UserInfoActivity extends AppCompatActivity {
             }
         });
 
-        mUserName.requestFocus();
+        mUserID.requestFocus();
     }
 
     protected void goToVideoHandler() {
-        String userName = mUserName.getText().toString().trim();
-        if (userName.length() == 0) {
-            mUserName.requestFocus();
-            Toast.makeText(this, "Please, enter the user name", Toast.LENGTH_SHORT).show();
+        String userID = mUserID.getText().toString().trim();
+        if (userID.length() == 0) {
+            mUserID.requestFocus();
+            Toast.makeText(this, "Please, enter the user ID", Toast.LENGTH_SHORT).show();
             return;
         }
         int userBirthYear = 0;
@@ -64,7 +64,7 @@ public class UserInfoActivity extends AppCompatActivity {
         String userGender = mUserGender.getSelectedItem().toString();
 
         Bundle bundle = new Bundle();
-        bundle.putString("user_name", userName);
+        bundle.putString("user_id", userID);
         bundle.putInt("user_birth_year", userBirthYear);
         bundle.putString("user_gender", userGender);
 
