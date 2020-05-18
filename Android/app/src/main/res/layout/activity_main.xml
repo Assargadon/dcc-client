@@ -36,5 +36,5 @@
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="16dp"
         android:layout_marginTop="16dp"
-        android:text="@string/record_video" />
+        android:text="@string/btn_record_video" />
 </RelativeLayout>

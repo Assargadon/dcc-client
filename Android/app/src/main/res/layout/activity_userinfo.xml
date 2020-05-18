@@ -1,35 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-        xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+    <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
-        <LinearLayout
-            android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+       >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:layout_height="match_parent"
+            android:labelFor="@id/et_username"
+            android:text="@string/tv_username">
+        </TextView>
+        <EditText
+            android:id="@+id/et_username"
+            android:layout_width="match_parent"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:background="@color/colorPrimary">
+            android:autofillHints=""
+            android:inputType="textPersonName">
+        </EditText>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="20dp" />
-            <TextView
-                android:layout_width="match_parent"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
-                android:layout_height="match_parent"
-                android:labelFor="@id/et_userid"
-                android:text="@string/tv_userid">
-            </TextView>
-            <EditText
-                android:id="@+id/et_userid"
-                android:layout_width="match_parent"
-                android:paddingStart="5dp"
-                android:paddingEnd="5dp"
-                android:layout_height="wrap_content"
-                android:autofillHints=""
-                android:inputType="textPersonName">
-            </EditText>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:layout_height="match_parent"
+            android:labelFor="@id/et_userage"
+            android:text="@string/tv_userage">
+        </TextView>
+        <EditText
+            android:id="@+id/et_userage"
+            android:layout_width="match_parent"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:layout_height="wrap_content"
+            android:autofillHints=""
+            android:inputType="numberDecimal">
+        </EditText>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
+            android:layout_height="match_parent"
+            android:labelFor="@id/sp_usergender"
+            android:text="@string/tv_usergender">
+        </TextView>
+        <Spinner
+            android:id="@+id/sp_usergender"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/btn_dropdown"
+            android:spinnerMode="dropdown"/>
 
-        </LinearLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
+        <Button
+            android:id="@+id/btn_gotomain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/btn_goto_main" />
+
+    </LinearLayout>
 </ScrollView>

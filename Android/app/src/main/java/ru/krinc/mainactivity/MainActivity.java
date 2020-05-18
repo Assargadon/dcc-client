@@ -40,6 +40,7 @@ import java.util.Collections;
 import java.util.Set;
 
 public class MainActivity extends Activity {
+    public static final String EXTRA_USERINFO = "EXTRA_USERINFO";
     private static final String TAG = "MainActivity";
 
     private final boolean enableCam2 = true;
@@ -76,6 +77,11 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            mMetadata = extras.getBundle(EXTRA_USERINFO);
+        }
 
         textureListeners[0] = this.textureListener1;
         textureListeners[1] = this.textureListener2;
@@ -219,16 +225,20 @@ public class MainActivity extends Activity {
     protected void startStopHandler() {
         if (isRecording) {
             mMetadata.putLong("stop_timestamp", System.currentTimeMillis() / 1000);
+            mMetadata.putInt("back_width", mVideoSizes[0].getWidth());
+            mMetadata.putInt("back_height", mVideoSizes[0].getHeight());
+            mMetadata.putInt("front_width", mVideoSizes[1].getWidth());
+            mMetadata.putInt("front_height", mVideoSizes[1].getHeight());
             stopRecording(0);
             if (enableCam2) stopRecording(1);
-            startStopButton.setText(R.string.record_video);
+            startStopButton.setText(R.string.btn_record_video);
             saveMetadata();
         } else {
             mMetadata.putLong("start_timestamp", System.currentTimeMillis() / 1000);
             getNextFileGroupPaths();
             startRecording(0);
             if (enableCam2) startRecording(1);
-            startStopButton.setText(R.string.stop_recording);
+            startStopButton.setText(R.string.btn_stop_recording);
         }
         isRecording = !isRecording;
         /*

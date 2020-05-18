@@ -1,8 +1,17 @@
 <resources>
     <string name="app_name">Dual Camera capture for rPPG dataset</string>
-    <string name="choose_user">Choose a user</string>
-    <string name="record_video">Record video</string>
-    <string name="stop_recording">Stop recording</string>
+    <string name="btn_choose_user">Choose a user</string>
+    <string name="btn_record_video">Record video</string>
+    <string name="btn_stop_recording">Stop recording</string>
 
     <string name="tv_userid">User ID:</string>
+    <string name="tv_username">User Name:</string>
+    <string name="tv_userage">User Age:</string>
+    <string name="tv_usergender">User Gender:</string>
+    <string-array name="tv_usergender_items">
+        <item>Not set</item>
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+    <string name="btn_goto_main">Go to video recording</string>
 </resources>
