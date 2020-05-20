@@ -1,4 +1,4 @@
-package ru.krinc.mainactivity;
+package ru.sfedu.DCC;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;
@@ -21,6 +21,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getTargetContext();
 
-        assertEquals("ru.krinc.mainactivity", appContext.getPackageName());
+        assertEquals("ru.sfedu.DCC", appContext.getPackageName());
     }
 }

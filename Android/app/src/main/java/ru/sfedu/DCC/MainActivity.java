@@ -1,4 +1,4 @@
-package ru.krinc.mainactivity;
+package ru.sfedu.DCC;
 
 import android.Manifest;
 import android.app.Activity;
@@ -568,7 +568,7 @@ public class MainActivity extends Activity {
         if (requestCode == REQUEST_CAMERA_PERMISSION) {
             if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
                 // close the app
-                Toast.makeText(MainActivity.this, "Sorry!!!, you can't use this app without granting permission", Toast.LENGTH_LONG).show();
+                Toast.makeText(MainActivity.this, "Unfortunately, you can't use this app without granting permission", Toast.LENGTH_LONG).show();
                 finish();
             }
         }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Dual Camera capture for rPPG dataset</string>
+    <string name="app_name">Dual Camera Collector</string>
     <string name="btn_choose_user">Choose a user</string>
     <string name="btn_record_video">Record video</string>
     <string name="btn_stop_recording">Stop recording</string>

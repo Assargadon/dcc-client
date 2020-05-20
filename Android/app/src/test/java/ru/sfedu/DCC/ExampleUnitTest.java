@@ -1,4 +1,4 @@
-package ru.krinc.mainactivity;
+package ru.sfedu.DCC;
 
 import org.junit.Test;
 

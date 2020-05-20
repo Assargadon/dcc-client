@@ -1,4 +1,4 @@
-package ru.krinc.mainactivity;
+package ru.sfedu.DCC;
 
 import android.content.Intent;
 import android.os.Build;
